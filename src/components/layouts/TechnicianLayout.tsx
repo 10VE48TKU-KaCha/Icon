@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
+import Swal from "sweetalert2";
 
 export default function TechnicianLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -11,6 +12,28 @@ export default function TechnicianLayout({ children }: { children: React.ReactNo
   const { data: session } = useSession();
 
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      title: "ยืนยันการออกจากระบบ",
+      text: "คุณต้องการออกจากระบบใช่หรือไม่?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "ใช่, ออกจากระบบ",
+      cancelButtonText: "ยกเลิก",
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#1e293b",
+      background: "#041d14",
+      color: "#ecfdf5",
+      customClass: {
+        popup: "border border-emerald-500/30 rounded-2xl shadow-2xl"
+      }
+    });
+
+    if (result.isConfirmed) {
+      await signOut({ callbackUrl: "/login" });
+    }
+  };
 
   const navLinks = [
     { name: "Dashboard", path: "/technician", icon: "📈" },
@@ -82,7 +105,7 @@ export default function TechnicianLayout({ children }: { children: React.ReactNo
             </div>
           </div>
           <button 
-            onClick={() => signOut({ callbackUrl: "/login" })}
+            onClick={handleLogout}
             className="w-full flex items-center justify-center px-4 py-2.5 text-sm text-red-300 bg-red-950/40 hover:bg-red-900/50 rounded-xl transition-colors border border-red-500/30 font-medium"
           >
             <span>🚪 ออกจากระบบ</span>
@@ -102,11 +125,19 @@ export default function TechnicianLayout({ children }: { children: React.ReactNo
             </svg>
           </button>
           
-          <div className="flex-1 flex items-center justify-end space-x-4">
-            <div className="flex items-center space-x-2 bg-emerald-900/60 border border-emerald-500/30 px-3 py-1.5 rounded-full text-xs text-emerald-300">
+          <div className="flex-1 flex items-center justify-end space-x-3">
+            <div className="hidden sm:flex items-center space-x-2 bg-emerald-900/60 border border-emerald-500/30 px-3 py-1.5 rounded-full text-xs text-emerald-300">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>ระบบพร้อมใช้งาน</span>
+              <span>{session?.user?.name || "Technician"}</span>
             </div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center space-x-1.5 px-3 py-1.5 text-xs text-red-300 hover:text-white bg-red-950/50 hover:bg-red-900/60 rounded-xl transition-all border border-red-500/30 font-medium"
+              title="ออกจากระบบ"
+            >
+              <span>🚪</span>
+              <span className="hidden sm:inline">ออกจากระบบ</span>
+            </button>
           </div>
         </header>
 
@@ -119,3 +150,4 @@ export default function TechnicianLayout({ children }: { children: React.ReactNo
     </div>
   );
 }
+
