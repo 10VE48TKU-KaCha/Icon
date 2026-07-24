@@ -1,0 +1,100 @@
+// Prisma Schema for Icon Multimedia Repair System
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  TECHNICIAN
+}
+
+enum DeviceType {
+  PC
+  NOTEBOOK
+  PRINTER
+  OTHER
+}
+
+enum RepairStatus {
+  RECEIVED        // รับเครื่อง
+  DIAGNOSING      // กำลังตรวจสอบ
+  WAITING_PARTS   // รออะไหล่
+  REPAIRING       // กำลังซ่อม
+  COMPLETED       // ซ่อมเสร็จ
+  DELIVERED       // ส่งมอบแล้ว
+  CANCELLED       // ยกเลิก
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  name      String
+  role      Role     @default(TECHNICIAN)
+  phone     String?
+  active    Boolean   @default(true)
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime @updatedAt
+
+  repairJobs RepairJob[] @relation("TechnicianJobs")
+
+  @@map("users")
+}
+
+model Customer {
+  id          String   @id @default(cuid())
+  name        String
+  phoneNumber String   @unique
+  email       String?
+  address     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  repairJobs RepairJob[]
+
+  @@map("customers")
+}
+
+model RepairJob {
+  id           String       @id @default(cuid())
+  ticketNumber String       @unique
+  customerId   String
+  technicianId String
+  deviceType   DeviceType
+  deviceBrand  String
+  deviceModel  String?
+  deviceSerial String?
+  description  String       // อาการเสีย
+  diagnosis    String?      // ผลวินิจฉัย
+  status       RepairStatus @default(RECEIVED)
+  partsCost    Float        @default(0)
+  serviceCost  Float        @default(0)
+  totalCost    Float        @default(0)
+  notes        String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  customer   Customer @relation(fields: [customerId], references: [id])
+  technician User     @relation("TechnicianJobs", fields: [technicianId], references: [id])
+
+  @@index([customerId])
+  @@index([technicianId])
+  @@index([status])
+  @@index([ticketNumber])
+  @@map("repair_jobs")
+}
+
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+
+  @@map("settings")
+}
