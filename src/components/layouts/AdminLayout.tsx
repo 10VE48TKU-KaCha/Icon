@@ -100,22 +100,36 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         <div className="p-4 border-t border-emerald-500/20 bg-emerald-950/40">
-          <div className="flex items-center mb-4 px-2">
-            <div className="w-10 h-10 rounded-xl bg-emerald-700/50 flex items-center justify-center text-white font-bold border border-emerald-400/40 shadow-md">
-              {session?.user?.name?.charAt(0) || "A"}
+          <div className="flex items-center justify-between mb-3 px-1">
+            <div className="flex items-center space-x-3 overflow-hidden">
+              <div className="w-10 h-10 rounded-full bg-emerald-950/90 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold text-lg shadow-inner flex-shrink-0">
+                {session?.user?.name?.charAt(0) || "A"}
+              </div>
+              <div className="overflow-hidden">
+                <p className="text-sm font-bold text-white truncate">{session?.user?.name || "Admin"}</p>
+                <p className="text-xs text-emerald-400 font-medium truncate">
+                  {isTempAdmin ? "Admin ชั่วคราว (Setup)" : "ผู้ดูแลระบบ"}
+                </p>
+              </div>
             </div>
-            <div className="ml-3 overflow-hidden">
-              <p className="text-sm font-semibold text-white truncate">{session?.user?.name || "Admin"}</p>
-              <p className="text-xs text-emerald-300/80 truncate">
-                {isTempAdmin ? "Admin ชั่วคราว (Setup)" : "ผู้ดูแลระบบ"}
-              </p>
-            </div>
+            <button
+              onClick={handleLogout}
+              title="Log out (ออกจากระบบ)"
+              className="p-2 text-red-400 hover:text-white hover:bg-red-500/20 rounded-xl transition-all border border-red-500/30 flex-shrink-0"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+            </button>
           </div>
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center justify-center px-4 py-2.5 text-sm text-red-300 bg-red-950/40 hover:bg-red-900/50 rounded-xl transition-colors border border-red-500/30 font-medium"
+            className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 text-sm text-red-300 bg-red-950/40 hover:bg-red-900/60 rounded-xl transition-all border border-red-500/30 font-medium group"
           >
-            <span>🚪 ออกจากระบบ</span>
+            <svg className="w-4 h-4 text-red-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            <span>Log out (ออกจากระบบ)</span>
           </button>
         </div>
       </aside>
