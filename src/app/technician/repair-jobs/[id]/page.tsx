@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { format } from "date-fns";
 import { th } from "date-fns/locale";
 import StatusTimeline from "@/components/StatusTimeline";
+import { ArrowLeft, Printer, User, Smartphone, Save, FileText, CheckCircle2 } from "lucide-react";
 
 const STATUS_OPTIONS = [
   { value: "RECEIVED", label: "รับเครื่อง" },
@@ -65,10 +66,10 @@ export default function RepairJobDetailPage(props: { params: Promise<{ id: strin
       showCancelButton: true,
       confirmButtonText: "บันทึก",
       cancelButtonText: "ยกเลิก",
-      background: "#0f172a",
-      color: "#f8fafc",
-      confirmButtonColor: "#0891b2",
-      cancelButtonColor: "#334155",
+      background: "#ffffff",
+      color: "#0f172a",
+      confirmButtonColor: "#059669",
+      cancelButtonColor: "#94a3b8",
     });
 
     if (result.isConfirmed) {
@@ -88,9 +89,9 @@ export default function RepairJobDetailPage(props: { params: Promise<{ id: strin
         Swal.fire({
           icon: "success",
           title: "บันทึกสำเร็จ",
-          background: "#0f172a",
-          color: "#f8fafc",
-          confirmButtonColor: "#0891b2",
+          background: "#ffffff",
+          color: "#0f172a",
+          confirmButtonColor: "#059669",
           timer: 1500,
         });
         
@@ -100,8 +101,8 @@ export default function RepairJobDetailPage(props: { params: Promise<{ id: strin
           icon: "error",
           title: "ผิดพลาด",
           text: error.message,
-          background: "#0f172a",
-          color: "#f8fafc",
+          background: "#ffffff",
+          color: "#0f172a",
         });
       }
     }
@@ -111,48 +112,63 @@ export default function RepairJobDetailPage(props: { params: Promise<{ id: strin
     window.print();
   };
 
-  if (loading) return <div className="text-cyan-500 py-12 text-center">กำลังโหลด...</div>;
-  if (!job) return <div className="text-red-500 py-12 text-center">ไม่พบข้อมูลงานซ่อม</div>;
+  if (loading) return (
+    <div className="text-emerald-700 py-12 text-center font-medium space-x-2 flex justify-center items-center">
+      <div className="w-5 h-5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+      <span>กำลังโหลดข้อมูลงานซ่อม...</span>
+    </div>
+  );
+  if (!job) return <div className="text-red-600 py-12 text-center font-bold">ไม่พบข้อมูลงานซ่อม</div>;
 
   const showCosts = ["COMPLETED", "DELIVERED"].includes(formData.status);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6 text-slate-800">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 print:hidden">
         <div>
-          <button onClick={() => router.back()} className="text-cyan-500 hover:text-cyan-400 mb-2 inline-block">
-            &larr; กลับ
+          <button onClick={() => router.back()} className="text-emerald-700 hover:text-emerald-800 font-bold mb-2 inline-flex items-center space-x-1 text-sm">
+            <ArrowLeft className="w-4 h-4" />
+            <span>ย้อนกลับ</span>
           </button>
-          <h1 className="text-3xl font-bold text-white mb-1">รายละเอียดงานซ่อม</h1>
-          <p className="text-slate-400">ใบรับซ่อม: <span className="text-cyan-400 font-medium">{job.ticketNumber}</span></p>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">รายละเอียดงานซ่อม</h1>
+          <p className="text-sm text-slate-500 font-medium">
+            ใบรับซ่อม: <span className="text-emerald-700 font-mono font-extrabold">{job.ticketNumber}</span>
+          </p>
         </div>
         <button 
           onClick={handlePrint}
-          className="bg-slate-800 hover:bg-slate-700 text-white px-5 py-2.5 rounded-xl font-medium transition-colors border border-slate-700 flex items-center gap-2"
+          className="bg-white hover:bg-slate-50 text-slate-800 px-5 py-2.5 rounded-xl font-bold text-sm border border-slate-300 transition flex items-center gap-2 shadow-xs"
         >
-          พิมพ์ใบเสร็จ/ใบรับเครื่อง
+          <Printer className="w-4 h-4 text-emerald-600" />
+          <span>พิมพ์ใบเสร็จ / ใบรับเครื่อง</span>
         </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Customer Info */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-          <h2 className="text-lg font-semibold text-white mb-4 border-b border-slate-800 pb-2">ข้อมูลลูกค้า</h2>
-          <div className="space-y-3">
-            <div><span className="text-slate-500 text-sm block">ชื่อ-นามสกุล</span> <span className="text-slate-200">{job.customer.name}</span></div>
-            <div><span className="text-slate-500 text-sm block">เบอร์โทรศัพท์</span> <span className="text-cyan-400">{job.customer.phoneNumber}</span></div>
-            {job.customer.email && <div><span className="text-slate-500 text-sm block">อีเมล</span> <span className="text-slate-200">{job.customer.email}</span></div>}
+        <div className="glass-card p-6 shadow-sm">
+          <div className="flex items-center space-x-2 text-base font-bold text-slate-900 border-b border-slate-100 pb-3 mb-4">
+            <User className="w-4 h-4 text-emerald-600" />
+            <span>ข้อมูลลูกค้า</span>
+          </div>
+          <div className="space-y-3 text-sm">
+            <div><span className="text-slate-400 text-xs font-bold block mb-0.5">ชื่อ-นามสกุล</span> <span className="text-slate-900 font-bold">{job.customer.name}</span></div>
+            <div><span className="text-slate-400 text-xs font-bold block mb-0.5">เบอร์โทรศัพท์</span> <span className="text-emerald-700 font-mono font-bold">{job.customer.phoneNumber}</span></div>
+            {job.customer.email && <div><span className="text-slate-400 text-xs font-bold block mb-0.5">อีเมล</span> <span className="text-slate-700 font-medium">{job.customer.email}</span></div>}
           </div>
         </div>
 
         {/* Device Info */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-          <h2 className="text-lg font-semibold text-white mb-4 border-b border-slate-800 pb-2">ข้อมูลอุปกรณ์</h2>
-          <div className="space-y-3">
-            <div><span className="text-slate-500 text-sm block">ประเภท</span> <span className="text-slate-200">{job.deviceType}</span></div>
-            <div><span className="text-slate-500 text-sm block">รุ่น / ยี่ห้อ</span> <span className="text-slate-200">{job.deviceBrand} {job.deviceModel}</span></div>
-            <div><span className="text-slate-500 text-sm block">Serial Number</span> <span className="text-slate-200">{job.deviceSerial || '-'}</span></div>
-            <div><span className="text-slate-500 text-sm block">อาการเสีย</span> <span className="text-rose-400">{job.description}</span></div>
+        <div className="glass-card p-6 shadow-sm">
+          <div className="flex items-center space-x-2 text-base font-bold text-slate-900 border-b border-slate-100 pb-3 mb-4">
+            <Smartphone className="w-4 h-4 text-emerald-600" />
+            <span>ข้อมูลอุปกรณ์</span>
+          </div>
+          <div className="space-y-3 text-sm">
+            <div><span className="text-slate-400 text-xs font-bold block mb-0.5">ประเภท</span> <span className="text-slate-900 font-bold">{job.deviceType}</span></div>
+            <div><span className="text-slate-400 text-xs font-bold block mb-0.5">รุ่น / ยี่ห้อ</span> <span className="text-slate-900 font-bold">{job.deviceBrand} {job.deviceModel}</span></div>
+            <div><span className="text-slate-400 text-xs font-bold block mb-0.5">Serial Number</span> <span className="text-slate-700 font-mono font-medium">{job.deviceSerial || '-'}</span></div>
+            <div><span className="text-slate-400 text-xs font-bold block mb-0.5">อาการเสีย</span> <span className="text-red-600 font-bold">{job.description}</span></div>
           </div>
         </div>
       </div>
@@ -161,16 +177,19 @@ export default function RepairJobDetailPage(props: { params: Promise<{ id: strin
       <StatusTimeline currentStatus={formData.status || job.status} />
 
       {/* Update Form */}
-      <form onSubmit={handleUpdate} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl print:hidden">
-        <h2 className="text-lg font-semibold text-white mb-4 border-b border-slate-800 pb-2">อัปเดตสถานะงานซ่อม</h2>
+      <form onSubmit={handleUpdate} className="glass-card p-6 sm:p-8 shadow-sm print:hidden">
+        <div className="flex items-center space-x-2 text-base font-bold text-slate-900 border-b border-slate-100 pb-3 mb-6">
+          <FileText className="w-5 h-5 text-emerald-600" />
+          <span>อัปเดตสถานะงานซ่อม</span>
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
-            <label className="block text-sm text-slate-400 mb-2">สถานะปัจจุบัน</label>
+            <label className="block text-xs font-bold text-slate-700 mb-2">สถานะปัจจุบัน</label>
             <select 
               value={formData.status}
               onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 text-white px-4 py-3 rounded-xl focus:outline-none focus:border-cyan-500 transition-colors font-medium"
+              className="w-full bg-white border border-slate-300 text-slate-900 px-4 py-3 rounded-xl focus:outline-none focus:border-emerald-600 text-sm font-bold"
             >
               {STATUS_OPTIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -179,69 +198,70 @@ export default function RepairJobDetailPage(props: { params: Promise<{ id: strin
           </div>
 
           <div>
-            <label className="block text-sm text-slate-400 mb-2">ช่างผู้รับผิดชอบ</label>
+            <label className="block text-xs font-bold text-slate-700 mb-2">ช่างผู้รับผิดชอบ</label>
             <input 
               type="text" 
               value={job.technician.name}
               disabled
-              className="w-full bg-slate-950/50 border border-slate-800 text-slate-400 px-4 py-3 rounded-xl cursor-not-allowed"
+              className="w-full bg-slate-100 border border-slate-200 text-slate-600 px-4 py-3 rounded-xl font-bold text-sm cursor-not-allowed"
             />
           </div>
         </div>
 
         <div className="mb-6">
-          <label className="block text-sm text-slate-400 mb-2">ผลการวินิจฉัย / การแก้ไข</label>
+          <label className="block text-xs font-bold text-slate-700 mb-2">ผลการวินิจฉัย / การแก้ไข</label>
           <textarea 
             rows={3}
             value={formData.diagnosis}
             onChange={(e) => setFormData({ ...formData, diagnosis: e.target.value })}
-            className="w-full bg-slate-950 border border-slate-800 text-slate-200 px-4 py-3 rounded-xl focus:outline-none focus:border-cyan-500 transition-colors"
+            className="w-full bg-white border border-slate-300 text-slate-900 px-4 py-3 rounded-xl focus:outline-none focus:border-emerald-600 text-sm font-medium resize-none"
             placeholder="ระบุสาเหตุหรือการดำเนินการแก้ไข..."
           ></textarea>
         </div>
 
         {showCosts && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 p-4 bg-slate-950 rounded-xl border border-slate-800">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 p-5 bg-emerald-50/60 rounded-2xl border border-emerald-200">
             <div>
-              <label className="block text-sm text-slate-400 mb-2">ค่าอะไหล่ (บาท)</label>
+              <label className="block text-xs font-bold text-slate-700 mb-2">ค่าอะไหล่ (บาท)</label>
               <input 
                 type="number" 
                 min="0"
                 value={formData.partsCost}
                 onChange={(e) => setFormData({ ...formData, partsCost: Number(e.target.value) })}
-                className="w-full bg-slate-900 border border-slate-700 text-slate-200 px-4 py-3 rounded-xl focus:outline-none focus:border-emerald-500 transition-colors"
+                className="w-full bg-white border border-slate-300 text-slate-900 px-4 py-3 rounded-xl focus:outline-none focus:border-emerald-600 font-bold font-mono text-sm"
               />
             </div>
             <div>
-              <label className="block text-sm text-slate-400 mb-2">ค่าบริการ (บาท)</label>
+              <label className="block text-xs font-bold text-slate-700 mb-2">ค่าบริการ (บาท)</label>
               <input 
                 type="number" 
                 min="0"
                 value={formData.serviceCost}
                 onChange={(e) => setFormData({ ...formData, serviceCost: Number(e.target.value) })}
-                className="w-full bg-slate-900 border border-slate-700 text-slate-200 px-4 py-3 rounded-xl focus:outline-none focus:border-emerald-500 transition-colors"
+                className="w-full bg-white border border-slate-300 text-slate-900 px-4 py-3 rounded-xl focus:outline-none focus:border-emerald-600 font-bold font-mono text-sm"
               />
             </div>
-            <div className="md:col-span-2 flex justify-between items-center pt-2 border-t border-slate-800">
-              <span className="text-slate-400">ยอดรวมสุทธิ</span>
-              <span className="text-2xl font-bold text-emerald-400">฿{(Number(formData.partsCost) + Number(formData.serviceCost)).toLocaleString()}</span>
+            <div className="md:col-span-2 flex justify-between items-center pt-3 border-t border-emerald-200">
+              <span className="font-bold text-slate-900 text-sm">ยอดรวมสุทธิ</span>
+              <span className="text-2xl font-black text-emerald-700 font-mono">฿{(Number(formData.partsCost) + Number(formData.serviceCost)).toLocaleString()}</span>
             </div>
           </div>
         )}
 
         <div className="mb-6">
-          <label className="block text-sm text-slate-400 mb-2">หมายเหตุเพิ่มเติม (ภายใน)</label>
+          <label className="block text-xs font-bold text-slate-700 mb-2">หมายเหตุเพิ่มเติม (ภายใน)</label>
           <textarea 
             rows={2}
             value={formData.notes}
             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-            className="w-full bg-slate-950 border border-slate-800 text-slate-200 px-4 py-3 rounded-xl focus:outline-none focus:border-cyan-500 transition-colors"
+            className="w-full bg-white border border-slate-300 text-slate-900 px-4 py-3 rounded-xl focus:outline-none focus:border-emerald-600 text-sm font-medium resize-none"
           ></textarea>
         </div>
 
-        <div className="flex justify-end pt-4 border-t border-slate-800">
-          <button type="submit" className="bg-cyan-600 hover:bg-cyan-500 text-white px-8 py-3 rounded-xl font-medium transition-colors shadow-lg shadow-cyan-900/20">
-            บันทึกการเปลี่ยนแปลง
+        <div className="flex justify-end pt-4 border-t border-slate-100">
+          <button type="submit" className="btn-primary px-8 py-3 rounded-xl font-bold text-sm flex items-center space-x-2 shadow-md">
+            <Save className="w-4 h-4" />
+            <span>บันทึกการเปลี่ยนแปลง</span>
           </button>
         </div>
       </form>

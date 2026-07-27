@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { th } from "date-fns/locale";
+import { Plus, Search, Clock, Wrench, CheckCircle2, LayoutDashboard, ArrowRight } from "lucide-react";
 
 const STATUS_MAP: Record<string, string> = {
   RECEIVED: "รับเครื่อง",
@@ -16,13 +17,13 @@ const STATUS_MAP: Record<string, string> = {
 };
 
 const STATUS_COLOR_MAP: Record<string, string> = {
-  RECEIVED: "bg-slate-700 text-slate-300",
-  DIAGNOSING: "bg-cyan-900/50 text-cyan-300",
-  WAITING_PARTS: "bg-orange-900/50 text-orange-300",
-  REPAIRING: "bg-blue-900/50 text-blue-300",
-  COMPLETED: "bg-green-900/50 text-green-300",
-  DELIVERED: "bg-emerald-900/50 text-emerald-300",
-  CANCELLED: "bg-red-900/50 text-red-300",
+  RECEIVED: "badge-received",
+  DIAGNOSING: "badge-diagnosing",
+  WAITING_PARTS: "badge-waiting",
+  REPAIRING: "badge-repairing",
+  COMPLETED: "badge-completed",
+  DELIVERED: "badge-delivered",
+  CANCELLED: "badge-cancelled",
 };
 
 export default function TechnicianDashboard() {
@@ -43,85 +44,108 @@ export default function TechnicianDashboard() {
   }, []);
 
   if (loading) {
-    return <div className="flex justify-center items-center h-64 text-cyan-500">กำลังโหลดข้อมูล...</div>;
+    return (
+      <div className="flex justify-center items-center h-64 text-emerald-700 font-medium space-x-2">
+        <div className="w-5 h-5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+        <span>กำลังโหลดข้อมูล...</span>
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 text-slate-800">
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2">ภาพรวมระบบงานซ่อม</h1>
-        <p className="text-slate-400">สรุปข้อมูลสถานะงานซ่อมปัจจุบัน</p>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+          <LayoutDashboard className="w-7 h-7 text-emerald-600" />
+          <span>ภาพรวมระบบงานซ่อม (Technician Dashboard)</span>
+        </h1>
+        <p className="text-sm text-slate-500 font-medium mt-1">สรุปข้อมูลสถานะงานซ่อมปัจจุบันของช่างประจำศูนย์</p>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-wrap gap-4">
-        <Link href="/technician/repair-jobs/new" className="bg-cyan-600 hover:bg-cyan-500 text-white px-6 py-3 rounded-xl font-medium transition-colors shadow-lg shadow-cyan-900/20">
-          + เปิดบิลใหม่
+      <div className="flex flex-wrap gap-3">
+        <Link href="/technician/repair-jobs/new" className="btn-primary px-6 py-3 rounded-xl font-bold text-sm flex items-center space-x-2 shadow-md">
+          <Plus className="w-4 h-4" />
+          <span>+ เปิดบิลรับซ่อมใหม่</span>
         </Link>
-        <Link href="/technician/search" className="bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-xl font-medium transition-colors border border-slate-700">
-          ค้นหางานซ่อม
+        <Link href="/technician/search" className="bg-white hover:bg-slate-50 text-slate-800 px-6 py-3 rounded-xl font-bold text-sm border border-slate-300 transition flex items-center space-x-2 shadow-xs">
+          <Search className="w-4 h-4 text-slate-500" />
+          <span>ค้นหางานซ่อม</span>
         </Link>
       </div>
 
       {/* Summary Cards */}
       {data?.summary && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-4 opacity-10"><span className="text-6xl">⏱</span></div>
-            <div className="text-slate-400 text-sm font-medium mb-2">งานรอดำเนินการ</div>
-            <div className="text-4xl font-bold text-white">{data.summary.pending}</div>
+          <div className="glass-card p-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-slate-400 text-xs uppercase font-bold">งานรอดำเนินการ</span>
+              <Clock className="w-6 h-6 text-amber-500" />
+            </div>
+            <div className="text-3xl font-extrabold text-amber-600 mt-2">{data.summary.pending}</div>
           </div>
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-4 opacity-10"><span className="text-6xl">🔧</span></div>
-            <div className="text-slate-400 text-sm font-medium mb-2">กำลังซ่อม</div>
-            <div className="text-4xl font-bold text-cyan-400">{data.summary.repairing}</div>
+          
+          <div className="glass-card p-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-slate-400 text-xs uppercase font-bold">กำลังซ่อม</span>
+              <Wrench className="w-6 h-6 text-emerald-600" />
+            </div>
+            <div className="text-3xl font-extrabold text-emerald-600 mt-2">{data.summary.repairing}</div>
           </div>
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-4 opacity-10"><span className="text-6xl">✅</span></div>
-            <div className="text-slate-400 text-sm font-medium mb-2">ซ่อมเสร็จวันนี้</div>
-            <div className="text-4xl font-bold text-emerald-400">{data.summary.completedToday}</div>
+          
+          <div className="glass-card p-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-slate-400 text-xs uppercase font-bold">ซ่อมเสร็จวันนี้</span>
+              <CheckCircle2 className="w-6 h-6 text-emerald-600" />
+            </div>
+            <div className="text-3xl font-extrabold text-emerald-700 mt-2">{data.summary.completedToday}</div>
           </div>
         </div>
       )}
 
       {/* Recent Jobs */}
       <div>
-        <h2 className="text-xl font-semibold text-white mb-6">งานซ่อมล่าสุดของคุณ</h2>
+        <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <Wrench className="w-5 h-5 text-emerald-600" />
+          <span>งานซ่อมล่าสุดของคุณ</span>
+        </h2>
+
         {data?.recentJobs?.length > 0 ? (
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+          <div className="glass-card overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-slate-950/50 text-slate-400 text-sm border-b border-slate-800">
-                    <th className="px-6 py-4 font-medium">เลขที่ใบรับซ่อม</th>
-                    <th className="px-6 py-4 font-medium">ลูกค้า</th>
-                    <th className="px-6 py-4 font-medium">อุปกรณ์</th>
-                    <th className="px-6 py-4 font-medium">สถานะ</th>
-                    <th className="px-6 py-4 font-medium">อัปเดตล่าสุด</th>
+                  <tr className="bg-slate-100/80 text-slate-700 text-xs font-bold uppercase border-b border-slate-200">
+                    <th className="px-6 py-4">เลขที่ใบรับซ่อม</th>
+                    <th className="px-6 py-4">ลูกค้า</th>
+                    <th className="px-6 py-4">อุปกรณ์</th>
+                    <th className="px-6 py-4">สถานะ</th>
+                    <th className="px-6 py-4">อัปเดตล่าสุด</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/50">
+                <tbody className="divide-y divide-slate-100 text-sm">
                   {data.recentJobs.map((job: any) => (
-                    <tr key={job.id} className="hover:bg-slate-800/50 transition-colors">
-                      <td className="px-6 py-4">
-                        <Link href={`/technician/repair-jobs/${job.id}`} className="text-cyan-400 hover:text-cyan-300 font-medium">
-                          {job.ticketNumber}
+                    <tr key={job.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-6 py-4 font-mono font-extrabold">
+                        <Link href={`/technician/repair-jobs/${job.id}`} className="text-emerald-700 hover:text-emerald-800 flex items-center space-x-1">
+                          <span>{job.ticketNumber}</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
                         </Link>
                       </td>
-                      <td className="px-6 py-4 text-slate-300">
+                      <td className="px-6 py-4 text-slate-900 font-bold">
                         {job.customer.name}
-                        <div className="text-xs text-slate-500 mt-1">{job.customer.phoneNumber}</div>
+                        <div className="text-xs text-slate-500 font-mono font-normal">{job.customer.phoneNumber}</div>
                       </td>
-                      <td className="px-6 py-4 text-slate-300">
+                      <td className="px-6 py-4 text-slate-700 font-medium">
                         {job.deviceType} {job.deviceBrand}
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium border border-transparent ${STATUS_COLOR_MAP[job.status] || "bg-slate-800 text-slate-300"}`}>
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${STATUS_COLOR_MAP[job.status] || "bg-slate-100 text-slate-700"}`}>
                           {STATUS_MAP[job.status] || job.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-slate-400 text-sm">
-                        {format(new Date(job.updatedAt), "dd MMM yyyy HH:mm", { locale: th })}
+                      <td className="px-6 py-4 text-slate-500 text-xs font-medium">
+                        {format(new Date(job.updatedAt), "dd MMM yyyy HH:mm", { locale: th })} น.
                       </td>
                     </tr>
                   ))}
@@ -130,7 +154,7 @@ export default function TechnicianDashboard() {
             </div>
           </div>
         ) : (
-          <div className="text-center py-12 bg-slate-900 rounded-2xl border border-slate-800 text-slate-500">
+          <div className="text-center py-12 glass-card text-slate-400 font-medium">
             ยังไม่มีประวัติงานซ่อม
           </div>
         )}

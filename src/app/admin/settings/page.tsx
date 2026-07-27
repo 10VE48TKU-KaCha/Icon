@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
+import { Settings, Save, Store, Receipt } from 'lucide-react';
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState<any>({
@@ -52,17 +53,17 @@ export default function AdminSettings() {
         title: 'สำเร็จ',
         text: 'บันทึกการตั้งค่าระบบเรียบร้อยแล้ว',
         icon: 'success',
-        background: '#0f3e30',
-        color: '#fff',
-        confirmButtonColor: '#10b981'
+        background: '#ffffff',
+        color: '#0f172a',
+        confirmButtonColor: '#059669'
       });
     } catch (error) {
       Swal.fire({
         title: 'ข้อผิดพลาด',
         text: 'ไม่สามารถบันทึกการตั้งค่าได้',
         icon: 'error',
-        background: '#0f3e30',
-        color: '#fff'
+        background: '#ffffff',
+        color: '#0f172a'
       });
     } finally {
       setSaving(false);
@@ -70,84 +71,89 @@ export default function AdminSettings() {
   };
 
   if (loading) return (
-    <div className="text-center py-24 text-emerald-300 font-medium flex items-center justify-center space-x-2">
-      <div className="w-5 h-5 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin"></div>
+    <div className="text-center py-24 text-emerald-700 font-medium flex items-center justify-center space-x-2">
+      <div className="w-5 h-5 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
       <span>กำลังโหลดข้อมูลตั้งค่าระบบ...</span>
     </div>
   );
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="space-y-6 max-w-4xl mx-auto text-slate-800">
       <div>
-        <h2 className="text-2xl font-bold text-white tracking-wide flex items-center gap-2">
-          <span>⚙️</span>
-          <span>ตั้งค่าระบบและใบรับซ่อม</span>
+        <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+          <Settings className="w-7 h-7 text-emerald-600" />
+          <span>ตั้งค่าระบบและใบรับซ่อม (System Settings)</span>
         </h2>
-        <p className="text-sm text-emerald-200/70">กำหนดข้อมูลร้านค้า เบอร์โทรศัพท์ และข้อความเงื่อนไขส่วนท้ายใบรับซ่อม</p>
+        <p className="text-sm text-slate-500 font-medium mt-1">กำหนดข้อมูลร้านค้า เบอร์โทรศัพท์ และข้อความเงื่อนไขส่วนท้ายใบรับซ่อม</p>
       </div>
 
-      <div className="glass-card border border-emerald-500/20 rounded-2xl p-6 sm:p-8 shadow-xl">
+      <div className="glass-card p-6 sm:p-8 shadow-sm">
         <form onSubmit={handleSave} className="space-y-6">
+          <div className="flex items-center space-x-2 text-base font-bold text-slate-900 border-b border-slate-100 pb-3">
+            <Store className="w-5 h-5 text-emerald-600" />
+            <span>ข้อมูลร้านค้า (Shop Information)</span>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="block text-xs font-semibold text-emerald-200">ชื่อร้านค้า / ศูนย์บริการ</label>
+              <label className="block text-xs font-bold text-slate-700">ชื่อร้านค้า / ศูนย์บริการ</label>
               <input 
                 type="text" 
                 name="shopName"
                 value={settings.shopName}
                 onChange={handleChange}
-                className="w-full bg-emerald-950/80 border border-emerald-500/30 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-400 text-sm"
+                className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 text-sm font-medium"
               />
             </div>
             <div className="space-y-2">
-              <label className="block text-xs font-semibold text-emerald-200">เบอร์โทรศัพท์ร้าน</label>
+              <label className="block text-xs font-bold text-slate-700">เบอร์โทรศัพท์ร้าน</label>
               <input 
                 type="text" 
                 name="shopPhone"
                 value={settings.shopPhone}
                 onChange={handleChange}
-                className="w-full bg-emerald-950/80 border border-emerald-500/30 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-400 text-sm font-mono"
+                className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 text-sm font-mono font-medium"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="block text-xs font-semibold text-emerald-200">ที่อยู่ร้านค้า</label>
+            <label className="block text-xs font-bold text-slate-700">ที่อยู่ร้านค้า</label>
             <textarea 
               name="shopAddress"
               value={settings.shopAddress}
               onChange={handleChange}
               rows={3}
-              className="w-full bg-emerald-950/80 border border-emerald-500/30 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-400 text-sm resize-none"
+              className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 text-sm font-medium resize-none"
             />
           </div>
 
-          <div className="border-t border-emerald-500/20 pt-6 space-y-6">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <span>🧾</span>
+          <div className="border-t border-slate-100 pt-6 space-y-6">
+            <div className="flex items-center space-x-2 text-base font-bold text-slate-900 border-b border-slate-100 pb-3">
+              <Receipt className="w-5 h-5 text-emerald-600" />
               <span>การตั้งค่าข้อความใบเสร็จ / ใบรับซ่อม</span>
-            </h3>
+            </div>
             
             <div className="space-y-2">
-              <label className="block text-xs font-semibold text-emerald-200">ข้อความส่วนหัวใบเสร็จ</label>
+              <label className="block text-xs font-bold text-slate-700">ข้อความส่วนหัวใบเสร็จ</label>
               <textarea 
                 name="receiptHeader"
                 value={settings.receiptHeader}
                 onChange={handleChange}
                 rows={2}
-                className="w-full bg-emerald-950/80 border border-emerald-500/30 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-400 text-sm resize-none"
+                className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 text-sm font-medium resize-none"
                 placeholder="เช่น ใบรับซ่อมสินค้า / ใบเสร็จรับเงิน Icon Multimedia"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="block text-xs font-semibold text-emerald-200">ข้อความส่วนท้ายใบเสร็จ (เงื่อนไขการรับประกัน)</label>
+              <label className="block text-xs font-bold text-slate-700">ข้อความส่วนท้ายใบเสร็จ (เงื่อนไขการรับประกัน)</label>
               <textarea 
                 name="receiptFooter"
                 value={settings.receiptFooter}
                 onChange={handleChange}
                 rows={4}
-                className="w-full bg-emerald-950/80 border border-emerald-500/30 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-400 text-sm resize-none"
+                className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 text-sm font-medium resize-none"
                 placeholder="เช่น รับประกันงานซ่อม 30 วัน..."
               />
             </div>
@@ -157,9 +163,10 @@ export default function AdminSettings() {
             <button 
               type="submit" 
               disabled={saving}
-              className="btn-primary disabled:opacity-50 px-8 py-3 rounded-xl font-bold text-sm tracking-wide shadow-lg shadow-emerald-600/40"
+              className="btn-primary disabled:opacity-50 px-8 py-3 rounded-xl font-bold text-sm flex items-center space-x-2 shadow-md"
             >
-              {saving ? 'กำลังบันทึก...' : '💾 บันทึกการตั้งค่า'}
+              <Save className="w-4 h-4" />
+              <span>{saving ? 'กำลังบันทึก...' : 'บันทึกการตั้งค่า'}</span>
             </button>
           </div>
         </form>

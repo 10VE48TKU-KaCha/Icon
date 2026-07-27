@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Swal from "sweetalert2";
-import { format } from "date-fns";
-import { th } from "date-fns/locale";
+import { Users, UserPlus, Search, Phone, Mail, ExternalLink } from "lucide-react";
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<any[]>([]);
@@ -37,33 +36,36 @@ export default function CustomersPage() {
     const { value: formValues } = await Swal.fire({
       title: "เพิ่มลูกค้าใหม่",
       html: `
-        <div class="flex flex-col gap-4 text-left">
+        <div class="flex flex-col gap-3 text-left font-sans">
           <div>
-            <label class="block text-sm text-slate-400 mb-1">ชื่อ-นามสกุล *</label>
-            <input id="swal-input1" class="w-full bg-slate-800 text-white border border-slate-700 rounded-lg p-3 focus:outline-none focus:border-cyan-500" placeholder="ระบุชื่อ">
+            <label class="block text-xs font-bold text-slate-700 mb-1">ชื่อ-นามสกุล *</label>
+            <input id="swal-input1" class="w-full bg-white text-slate-900 border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-600" placeholder="ระบุชื่อ-นามสกุล">
           </div>
           <div>
-            <label class="block text-sm text-slate-400 mb-1">เบอร์โทรศัพท์ *</label>
-            <input id="swal-input2" type="tel" class="w-full bg-slate-800 text-white border border-slate-700 rounded-lg p-3 focus:outline-none focus:border-cyan-500" placeholder="08xxxxxxxx">
+            <label class="block text-xs font-bold text-slate-700 mb-1">เบอร์โทรศัพท์ *</label>
+            <input id="swal-input2" type="tel" class="w-full bg-white text-slate-900 border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-600" placeholder="08xxxxxxxx">
           </div>
           <div>
-            <label class="block text-sm text-slate-400 mb-1">อีเมล</label>
-            <input id="swal-input3" type="email" class="w-full bg-slate-800 text-white border border-slate-700 rounded-lg p-3 focus:outline-none focus:border-cyan-500" placeholder="example@email.com">
+            <label class="block text-xs font-bold text-slate-700 mb-1">อีเมล</label>
+            <input id="swal-input3" type="email" class="w-full bg-white text-slate-900 border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-600" placeholder="example@email.com">
           </div>
           <div>
-            <label class="block text-sm text-slate-400 mb-1">ที่อยู่</label>
-            <textarea id="swal-input4" class="w-full bg-slate-800 text-white border border-slate-700 rounded-lg p-3 focus:outline-none focus:border-cyan-500" rows="2"></textarea>
+            <label class="block text-xs font-bold text-slate-700 mb-1">ที่อยู่</label>
+            <textarea id="swal-input4" class="w-full bg-white text-slate-900 border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-600 resize-none" rows="2"></textarea>
           </div>
         </div>
       `,
-      background: "#0f172a",
-      color: "#f8fafc",
+      background: "#ffffff",
+      color: "#0f172a",
       confirmButtonText: "บันทึก",
       showCancelButton: true,
       cancelButtonText: "ยกเลิก",
-      confirmButtonColor: "#0891b2",
-      cancelButtonColor: "#334155",
+      confirmButtonColor: "#059669",
+      cancelButtonColor: "#94a3b8",
       focusConfirm: false,
+      customClass: {
+        popup: "rounded-2xl border border-emerald-200 shadow-xl"
+      },
       preConfirm: () => {
         const name = (document.getElementById("swal-input1") as HTMLInputElement).value;
         const phone = (document.getElementById("swal-input2") as HTMLInputElement).value;
@@ -94,9 +96,9 @@ export default function CustomersPage() {
         Swal.fire({
           icon: "success",
           title: "บันทึกสำเร็จ",
-          background: "#0f172a",
-          color: "#f8fafc",
-          confirmButtonColor: "#0891b2",
+          background: "#ffffff",
+          color: "#0f172a",
+          confirmButtonColor: "#059669",
         });
         
         fetchCustomers(search);
@@ -105,80 +107,100 @@ export default function CustomersPage() {
           icon: "error",
           title: "บันทึกล้มเหลว",
           text: error.message,
-          background: "#0f172a",
-          color: "#f8fafc",
-          confirmButtonColor: "#0891b2",
+          background: "#ffffff",
+          color: "#0f172a",
+          confirmButtonColor: "#059669",
         });
       }
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-slate-800">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-1">จัดการลูกค้า</h1>
-          <p className="text-slate-400">ค้นหาและเพิ่มข้อมูลลูกค้าในระบบ</p>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+            <Users className="w-7 h-7 text-emerald-600" />
+            <span>จัดการลูกค้า (Customer Management)</span>
+          </h1>
+          <p className="text-sm text-slate-500 font-medium mt-1">ค้นหาและเพิ่มข้อมูลลูกค้าในระบบ</p>
         </div>
         <button 
           onClick={handleAddCustomer}
-          className="bg-cyan-600 hover:bg-cyan-500 text-white px-5 py-2.5 rounded-xl font-medium transition-colors shadow-lg shadow-cyan-900/20"
+          className="btn-primary px-5 py-2.5 rounded-xl font-bold text-sm flex items-center space-x-2 shadow-md whitespace-nowrap"
         >
-          + เพิ่มลูกค้าใหม่
+          <UserPlus className="w-4 h-4" />
+          <span>+ เพิ่มลูกค้าใหม่</span>
         </button>
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+      <div className="glass-card p-6 shadow-sm">
         <form onSubmit={handleSearch} className="flex gap-3 mb-6">
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="ค้นหาชื่อ หรือ เบอร์โทรศัพท์..."
-            className="flex-1 bg-slate-950 border border-slate-800 text-slate-200 px-4 py-2.5 rounded-xl focus:outline-none focus:border-cyan-500 transition-colors"
-          />
+          <div className="relative flex-1">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="ค้นหาชื่อ หรือ เบอร์โทรศัพท์..."
+              className="w-full bg-white border border-slate-300 text-slate-900 pl-10 pr-4 py-2.5 rounded-xl focus:outline-none focus:border-emerald-600 text-sm font-medium"
+            />
+          </div>
           <button 
             type="submit"
-            className="bg-slate-800 hover:bg-slate-700 text-white px-6 py-2.5 rounded-xl font-medium transition-colors border border-slate-700"
+            className="bg-slate-100 hover:bg-slate-200 text-slate-800 px-6 py-2.5 rounded-xl font-bold text-sm transition border border-slate-300"
           >
             ค้นหา
           </button>
         </form>
 
         {loading ? (
-          <div className="text-center py-12 text-cyan-500">กำลังโหลด...</div>
+          <div className="text-center py-12 text-emerald-700 font-medium space-x-2 flex justify-center items-center">
+            <div className="w-4 h-4 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+            <span>กำลังโหลดข้อมูลลูกค้า...</span>
+          </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full text-left whitespace-nowrap">
               <thead>
-                <tr className="bg-slate-950/50 text-slate-400 text-sm border-b border-slate-800">
-                  <th className="px-6 py-4 font-medium">ชื่อลูกค้า</th>
-                  <th className="px-6 py-4 font-medium">เบอร์โทรศัพท์</th>
-                  <th className="px-6 py-4 font-medium">อีเมล</th>
-                  <th className="px-6 py-4 font-medium text-center">จำนวนงานซ่อม</th>
-                  <th className="px-6 py-4 font-medium text-right">จัดการ</th>
+                <tr className="bg-slate-100/80 text-slate-700 text-xs font-bold uppercase border-b border-slate-200">
+                  <th className="px-6 py-4">ชื่อลูกค้า</th>
+                  <th className="px-6 py-4">เบอร์โทรศัพท์</th>
+                  <th className="px-6 py-4">อีเมล</th>
+                  <th className="px-6 py-4 text-center">จำนวนงานซ่อม</th>
+                  <th className="px-6 py-4 text-right">จัดการ</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/50">
+              <tbody className="divide-y divide-slate-100 text-sm">
                 {customers.length > 0 ? (
                   customers.map((customer) => (
-                    <tr key={customer.id} className="hover:bg-slate-800/50 transition-colors">
-                      <td className="px-6 py-4 text-slate-200 font-medium">{customer.name}</td>
-                      <td className="px-6 py-4 text-cyan-400">{customer.phoneNumber}</td>
-                      <td className="px-6 py-4 text-slate-400">{customer.email || '-'}</td>
-                      <td className="px-6 py-4 text-center text-slate-300">
-                        <span className="bg-slate-800 px-3 py-1 rounded-full text-xs">{customer._count?.repairJobs || 0}</span>
+                    <tr key={customer.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-6 py-4 text-slate-900 font-bold">{customer.name}</td>
+                      <td className="px-6 py-4 text-emerald-700 font-mono font-bold flex items-center space-x-1">
+                        <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>{customer.phoneNumber}</span>
+                      </td>
+                      <td className="px-6 py-4 text-slate-500 font-medium">{customer.email || '-'}</td>
+                      <td className="px-6 py-4 text-center">
+                        <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold px-3 py-1 rounded-full text-xs">
+                          {customer._count?.repairJobs || 0} รายการ
+                        </span>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <Link href={`/track/${customer.phoneNumber}`} target="_blank" className="text-cyan-500 hover:text-cyan-400 text-sm">
-                          ดูประวัติ &rarr;
+                        <Link 
+                          href={`/track/${encodeURIComponent(customer.phoneNumber)}`} 
+                          target="_blank" 
+                          className="text-emerald-700 hover:text-emerald-800 font-bold text-xs inline-flex items-center space-x-1"
+                        >
+                          <span>ดูประวัติ</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
                         </Link>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
+                    <td colSpan={5} className="px-6 py-12 text-center text-slate-400 font-medium">
                       ไม่พบข้อมูลลูกค้า
                     </td>
                   </tr>

@@ -5,6 +5,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import Swal from "sweetalert2";
+import { 
+  LayoutDashboard, 
+  Users, 
+  PlusCircle, 
+  Search, 
+  LogOut, 
+  Menu, 
+  X, 
+  Wrench, 
+  User 
+} from "lucide-react";
 
 export default function TechnicianLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -22,11 +33,11 @@ export default function TechnicianLayout({ children }: { children: React.ReactNo
       confirmButtonText: "ใช่, ออกจากระบบ",
       cancelButtonText: "ยกเลิก",
       confirmButtonColor: "#ef4444",
-      cancelButtonColor: "#1e293b",
-      background: "#041d14",
-      color: "#ecfdf5",
+      cancelButtonColor: "#94a3b8",
+      background: "#ffffff",
+      color: "#0f172a",
       customClass: {
-        popup: "border border-emerald-500/30 rounded-2xl shadow-2xl"
+        popup: "border border-emerald-200 rounded-2xl shadow-xl"
       }
     });
 
@@ -36,120 +47,111 @@ export default function TechnicianLayout({ children }: { children: React.ReactNo
   };
 
   const navLinks = [
-    { name: "Dashboard", path: "/technician", icon: "📈" },
-    { name: "จัดการลูกค้า", path: "/technician/customers", icon: "👥" },
-    { name: "รับเรื่องซ่อมใหม่", path: "/technician/repair-jobs/new", icon: "📝" },
-    { name: "ค้นหางานซ่อม", path: "/technician/search", icon: "🔍" },
+    { name: "Dashboard", path: "/technician", icon: LayoutDashboard },
+    { name: "จัดการลูกค้า", path: "/technician/customers", icon: Users },
+    { name: "รับเรื่องซ่อมใหม่", path: "/technician/repair-jobs/new", icon: PlusCircle },
+    { name: "ค้นหางานซ่อม", path: "/technician/search", icon: Search },
   ];
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#041d14]">
+    <div className="flex h-screen overflow-hidden bg-slate-50 text-slate-800 font-sans">
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
         <div 
-          className="fixed inset-0 z-20 bg-black/60 lg:hidden backdrop-blur-sm"
+          className="fixed inset-0 z-20 bg-slate-900/40 lg:hidden backdrop-blur-xs"
           onClick={toggleSidebar}
         ></div>
       )}
 
       {/* Sidebar */}
       <aside 
-        className={`fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 ease-in-out glass-sidebar flex flex-col lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 ease-in-out bg-white border-r border-slate-200 flex flex-col lg:static lg:translate-x-0 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-center h-20 border-b border-emerald-500/20 px-4">
+        <div className="flex items-center justify-between h-20 border-b border-slate-100 px-6">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-emerald-500/30">
-              T
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white font-black text-xl shadow-md shadow-emerald-600/20">
+              <Wrench className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-white tracking-wider">
-                <span className="text-emerald-400">ICON</span> TECH
+              <h1 className="text-base font-extrabold text-slate-900 tracking-wider">
+                <span className="text-emerald-600">ICON</span> TECH
               </h1>
-              <span className="text-[10px] text-emerald-400/80 uppercase font-semibold tracking-widest block">
+              <span className="text-[10px] text-slate-400 uppercase font-bold tracking-widest block">
                 Technician Panel
               </span>
             </div>
           </div>
+          <button onClick={toggleSidebar} className="lg:hidden text-slate-400 hover:text-slate-600">
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
-        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+        <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
           {navLinks.map((link) => {
+            const IconComp = link.icon;
             const isActive = pathname === link.path || (link.path !== '/technician' && pathname.startsWith(link.path));
             return (
               <Link
                 key={link.path}
                 href={link.path}
-                className={`flex items-center px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
+                className={`flex items-center px-4 py-3 rounded-xl transition-all duration-200 text-sm font-semibold ${
                   isActive 
-                    ? "bg-gradient-to-r from-emerald-600/30 to-emerald-500/10 text-emerald-300 border border-emerald-500/40 shadow-sm" 
-                    : "text-emerald-100/70 hover:bg-emerald-800/30 hover:text-white"
+                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-xs" 
+                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                 }`}
               >
-                <span className="mr-3 text-xl">{link.icon}</span>
+                <IconComp className={`mr-3 w-5 h-5 ${isActive ? "text-emerald-600" : "text-slate-400"}`} />
                 <span>{link.name}</span>
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t border-emerald-500/20 bg-emerald-950/40">
+        <div className="p-4 border-t border-slate-100 bg-slate-50/60">
           <div className="flex items-center justify-between mb-3 px-1">
             <div className="flex items-center space-x-3 overflow-hidden">
-              <div className="w-10 h-10 rounded-full bg-emerald-950/90 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold text-lg shadow-inner flex-shrink-0">
-                {session?.user?.name?.charAt(0) || "T"}
+              <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                <User className="w-4 h-4" />
               </div>
               <div className="overflow-hidden">
-                <p className="text-sm font-bold text-white truncate">{session?.user?.name || "Technician"}</p>
-                <p className="text-xs text-emerald-400 font-medium truncate">ช่างซ่อมประจำศูนย์</p>
+                <p className="text-xs font-bold text-slate-900 truncate">{session?.user?.name || "Technician"}</p>
+                <p className="text-[11px] text-emerald-700 font-semibold truncate">ช่างซ่อมประจำศูนย์</p>
               </div>
             </div>
-            <button
-              onClick={handleLogout}
-              title="Log out (ออกจากระบบ)"
-              className="p-2 text-red-400 hover:text-white hover:bg-red-500/20 rounded-xl transition-all border border-red-500/30 flex-shrink-0"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
-            </button>
           </div>
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 text-sm text-red-300 bg-red-950/40 hover:bg-red-900/60 rounded-xl transition-all border border-red-500/30 font-medium group"
+            className="w-full flex items-center justify-center space-x-2 px-3 py-2 text-xs text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-xl transition-all border border-red-200 font-semibold"
           >
-            <svg className="w-4 h-4 text-red-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            <span>Log out (ออกจากระบบ)</span>
+            <LogOut className="w-3.5 h-3.5" />
+            <span>ออกจากระบบ</span>
           </button>
         </div>
       </aside>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="h-16 flex items-center justify-between px-6 lg:px-8 glass-sidebar border-b border-emerald-500/20 z-10">
+        <header className="h-16 flex items-center justify-between px-6 lg:px-8 bg-white border-b border-slate-200 z-10">
           <button 
             onClick={toggleSidebar}
-            className="lg:hidden text-emerald-300 hover:text-white focus:outline-none"
+            className="lg:hidden text-slate-600 hover:text-slate-900 focus:outline-none"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            <Menu className="w-6 h-6" />
           </button>
           
           <div className="flex-1 flex items-center justify-end space-x-3">
-            <div className="hidden sm:flex items-center space-x-2 bg-emerald-900/60 border border-emerald-500/30 px-3 py-1.5 rounded-full text-xs text-emerald-300">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <div className="hidden sm:flex items-center space-x-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full text-xs text-emerald-800 font-semibold">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               <span>{session?.user?.name || "Technician"}</span>
             </div>
             <button
               onClick={handleLogout}
-              className="flex items-center space-x-1.5 px-3 py-1.5 text-xs text-red-300 hover:text-white bg-red-950/50 hover:bg-red-900/60 rounded-xl transition-all border border-red-500/30 font-medium"
+              className="flex items-center space-x-1.5 px-3 py-1.5 text-xs text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all font-semibold"
               title="ออกจากระบบ"
             >
-              <span>🚪</span>
+              <LogOut className="w-3.5 h-3.5 text-slate-500" />
               <span className="hidden sm:inline">ออกจากระบบ</span>
             </button>
           </div>
@@ -164,4 +166,3 @@ export default function TechnicianLayout({ children }: { children: React.ReactNo
     </div>
   );
 }
-
