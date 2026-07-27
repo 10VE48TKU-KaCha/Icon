@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { format } from "date-fns";
 import { th } from "date-fns/locale";
+import StatusTimeline from "@/components/StatusTimeline";
 
 const STATUS_OPTIONS = [
   { value: "RECEIVED", label: "รับเครื่อง" },
@@ -155,6 +156,9 @@ export default function RepairJobDetailPage(props: { params: Promise<{ id: strin
           </div>
         </div>
       </div>
+
+      {/* Progress Timeline */}
+      <StatusTimeline currentStatus={formData.status || job.status} />
 
       {/* Update Form */}
       <form onSubmit={handleUpdate} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl print:hidden">

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { format } from "date-fns";
 import { th } from "date-fns/locale";
+import StatusTimeline from "@/components/StatusTimeline";
 
 const STATUS_MAP: Record<string, string> = {
   RECEIVED: "รับเครื่อง",
@@ -72,6 +73,8 @@ export default async function TrackResultsPage({
                         {STATUS_MAP[job.status] || job.status}
                       </div>
                     </div>
+
+                    <StatusTimeline currentStatus={job.status} />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8 mb-6">
                       <div>

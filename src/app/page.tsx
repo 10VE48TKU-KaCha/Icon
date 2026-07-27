@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { th } from "date-fns/locale";
 import { useSession, signOut } from "next-auth/react";
 import Swal from "sweetalert2";
+import StatusTimeline from "@/components/StatusTimeline";
 
 const STATUS_MAP: Record<string, string> = {
   RECEIVED: "รับเครื่อง",
@@ -177,6 +178,8 @@ export default function Home() {
                     {STATUS_MAP[job.status] || job.status}
                   </div>
                 </div>
+
+                <StatusTimeline currentStatus={job.status} />
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 text-sm bg-emerald-950/50 p-4 rounded-xl border border-emerald-500/20">
                   <div>
