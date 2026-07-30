@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Swal from "sweetalert2";
-import { Wrench, Lock, User, KeyRound } from "lucide-react";
+import { Wrench, Lock, User, KeyRound, ArrowLeft } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -124,6 +125,11 @@ export default function LoginPage() {
                 </>
               )}
             </button>
+
+            <Link href="/" className="w-full bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 py-3.5 rounded-xl font-bold text-sm tracking-wide mt-3 flex justify-center items-center space-x-2 shadow-sm transition-colors">
+              <ArrowLeft className="w-4 h-4 text-slate-500" />
+              <span>กลับไปหน้าค้นหาสถานะ</span>
+            </Link>
           </form>
           
           <div className="mt-8 text-xs text-slate-400 font-medium">

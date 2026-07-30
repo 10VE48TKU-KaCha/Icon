@@ -96,9 +96,9 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center p-4 sm:p-8 md:p-12 relative overflow-hidden text-slate-800 font-sans">
+    <div className="min-h-screen bg-white flex flex-col items-center p-4 sm:p-8 md:p-12 relative overflow-hidden text-slate-800 font-sans">
       {/* Soft Background Gradient Decor */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-emerald-100/60 via-slate-50 to-transparent blur-3xl -z-10 pointer-events-none"></div>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-emerald-100/60 via-white to-transparent blur-3xl -z-10 pointer-events-none"></div>
 
       {/* User Session Bar */}
       {session?.user && (
@@ -135,15 +135,13 @@ export default function Home() {
 
       <main className="flex-1 w-full max-w-4xl flex flex-col items-center z-10 mt-2 sm:mt-6">
         {/* Brand Header */}
-        <div className="text-center mb-10">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-tr from-emerald-600 via-emerald-500 to-teal-400 rounded-3xl mx-auto flex items-center justify-center text-white shadow-xl shadow-emerald-600/20 mb-5 border-2 border-white">
-            <Wrench className="w-9 h-9 sm:w-11 sm:h-11" />
-          </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-3 text-slate-900">
+        <div className="text-center mb-10 mt-8">
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4 text-slate-900">
             ICON <span className="text-emerald-600">MULTIMEDIA</span>
           </h1>
-          <p className="text-base sm:text-lg text-slate-600 font-medium max-w-lg mx-auto">
-            ระบบตรวจสอบสถานะงานซ่อมสำหรับลูกค้า (Repair Status Tracking Portal)
+          <p className="text-base sm:text-lg text-slate-600 font-medium max-w-lg mx-auto flex flex-col gap-1">
+            <span>ระบบตรวจสอบสถานะงานซ่อมสำหรับลูกค้า</span>
+            <span className="text-sm opacity-80">(Repair Status Tracking Portal)</span>
           </p>
         </div>
 
